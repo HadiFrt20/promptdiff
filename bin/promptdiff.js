@@ -146,7 +146,7 @@ program
   .description('Compute quality score for a prompt file')
   .action(handle((file) => {
     const { scoreCommand } = require('../src/commands/score');
-    scoreCommand(resolve(file));
+    scoreCommand(resolve(file), { json: program.opts().json });
   }));
 
 program
@@ -154,7 +154,7 @@ program
   .description('Show statistics for a prompt file')
   .action(handle((file) => {
     const { statsCommand } = require('../src/commands/stats');
-    statsCommand(resolve(file));
+    statsCommand(resolve(file), { json: program.opts().json });
   }));
 
 program

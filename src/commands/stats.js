@@ -72,8 +72,8 @@ function statsCommand(file, options = {}) {
     grade: qualityScore.grade,
   };
 
-  const output = renderStats(statsResult);
-  console.log(output);
+  const { output } = require('../formatter/output');
+  output(statsResult, { json: options.json, render: renderStats });
   return statsResult;
 }
 

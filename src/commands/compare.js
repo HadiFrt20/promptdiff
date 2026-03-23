@@ -35,8 +35,13 @@ function resolveProvider(options = {}) {
     return new OpenAIProvider(key);
   }
 
-  if (model === 'ollama' || model === 'llama3') {
-    return new OllamaProvider(model === 'ollama' ? 'llama3' : model);
+  if (model === 'ollama') {
+    return new OllamaProvider('llama3');
+  }
+
+  // Any other model name — try Ollama (e.g., qwen2.5-coder:1.5b, llama3, mistral)
+  if (model && !['claude', 'gpt4o'].includes(model)) {
+    return new OllamaProvider(model);
   }
 
   // Auto-detect from available API keys
