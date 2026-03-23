@@ -58,10 +58,10 @@ program
   .command('compare <fileA> <fileB>')
   .description('Run both prompts against the same input and compare outputs')
   .requiredOption('--input <text>', 'Test input text (or @filepath)')
-  .option('--model <alias>', 'Model to use')
+  .option('--model <alias>', 'Model to use (claude, gpt4o, ollama, llama3)')
   .action(handle(async (fileA, fileB, options) => {
     const { compareCommand } = require('../src/commands/compare');
-    await compareCommand(resolve(fileA), resolve(fileB), options);
+    await compareCommand(resolve(fileA), resolve(fileB), { ...options, json: program.opts().json });
   }));
 
 program
@@ -132,6 +132,16 @@ program
   });
 
 program
+  .command('migrate <input>')
+  .description('Convert a plain text prompt into a structured .prompt file')
+  .option('--output <file>', 'Output file path (use - for stdout)')
+  .option('--name <name>', 'Prompt name for frontmatter')
+  .action(handle((input, options) => {
+    const { migrateCommand } = require('../src/commands/migrate');
+    migrateCommand(resolve(input), options);
+  }));
+
+program
   .command('score <file>')
   .description('Compute quality score for a prompt file')
   .action(handle((file) => {
@@ -145,6 +155,43 @@ program
   .action(handle((file) => {
     const { statsCommand } = require('../src/commands/stats');
     statsCommand(resolve(file));
+  }));
+
+program
+  .command('compose <file>')
+  .description('Resolve all includes and extends, output the fully composed prompt')
+  .option('--output <file>', 'Write composed result to a file instead of stdout')
+  .action(handle((file, options) => {
+    const { composeCommand } = require('../src/commands/compose');
+    composeCommand(resolve(file), options);
+  }));
+
+program
+  .command('log-to-mlflow <file>')
+  .description('Log a prompt file to MLflow tracking')
+  .option('--experiment <name>', 'MLflow experiment name', 'promptdiff')
+  .option('--run-name <name>', 'MLflow run name')
+  .option('--tracking-uri <uri>', 'MLflow tracking URI')
+  .action(handle(async (file, options) => {
+    const { mlflowLogCommand } = require('../src/commands/mlflow-log');
+    await mlflowLogCommand(resolve(file), {
+      experiment: options.experiment,
+      runName: options.runName,
+      trackingUri: options.trackingUri,
+    });
+  }));
+
+program
+  .command('diff-to-mlflow <fileA> <fileB>')
+  .description('Log a prompt diff to MLflow tracking')
+  .option('--experiment <name>', 'MLflow experiment name', 'promptdiff')
+  .option('--tracking-uri <uri>', 'MLflow tracking URI')
+  .action(handle(async (fileA, fileB, options) => {
+    const { mlflowDiffCommand } = require('../src/commands/mlflow-diff');
+    await mlflowDiffCommand(resolve(fileA), resolve(fileB), {
+      experiment: options.experiment,
+      trackingUri: options.trackingUri,
+    });
   }));
 
 program.parse();

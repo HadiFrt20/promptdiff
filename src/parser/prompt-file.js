@@ -4,7 +4,9 @@ const { parseFrontmatter, hasFrontmatter } = require('./frontmatter');
 const { detectSectionsFromText, autoDetectSections, isSectionHeader } = require('./section-detector');
 const { computeHash } = require('../utils/hash');
 
-function parsePromptFile(filePath) {
+function parsePromptFile(filePath, options = {}) {
+  const { compose: shouldCompose = true } = options;
+
   if (!fs.existsSync(filePath)) {
     throw new Error(`File not found: ${filePath}`);
   }
@@ -21,10 +23,12 @@ function parsePromptFile(filePath) {
     throw new Error(`File appears to be binary: ${filePath}`);
   }
 
-  return parsePromptContent(content, filePath);
+  return parsePromptContent(content, filePath, options);
 }
 
-function parsePromptContent(content, filePath = '<inline>') {
+function parsePromptContent(content, filePath = '<inline>', options = {}) {
+  const { compose: shouldCompose = true } = options;
+
   const hash = computeHash(content);
   const { meta, body } = parseFrontmatter(content);
 
@@ -37,13 +41,22 @@ function parsePromptContent(content, filePath = '<inline>') {
     sections = autoDetectSections(body);
   }
 
-  return {
+  const result = {
     meta,
     sections,
     raw: content,
     filePath: filePath,
     hash,
   };
+
+  // Auto-compose if extends or includes are present
+  if (shouldCompose && (meta.extends || meta.includes)) {
+    const { compose } = require('./composer');
+    const composed = compose(result);
+    return composed;
+  }
+
+  return result;
 }
 
 module.exports = { parsePromptFile, parsePromptContent };

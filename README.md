@@ -9,7 +9,7 @@
 Ships as a CLI and a [Claude Code hook](#claude-code-hook) that catches prompt bugs before they ship.
 
 [![npm version](https://img.shields.io/npm/v/promptdiff)](https://www.npmjs.com/package/promptdiff)
-[![tests](https://img.shields.io/badge/tests-205%20passing-brightgreen)](#tests)
+[![tests](https://img.shields.io/badge/tests-217%20passing-brightgreen)](#tests)
 [![coverage](https://img.shields.io/badge/coverage-94%25-brightgreen)](#tests)
 [![license](https://img.shields.io/badge/license-MIT-blue)](#license)
 [![zero deps](https://img.shields.io/badge/runtime%20deps-3-orange)](#install)
@@ -406,6 +406,114 @@ promptdiff score agent.prompt --json | jq '.total >= 70'
 
 ---
 
+## `promptdiff compare` — A/B Testing
+
+Run the same input through two prompt versions and compare the outputs. Requires an LLM.
+
+```bash
+promptdiff compare v3.prompt v7.prompt --input "I was charged twice" --model claude
+```
+
+Supports `--model claude`, `--model gpt4o`, `--model ollama`. Auto-detects from API keys if no flag is given.
+
+---
+
+## `promptdiff migrate` — Convert Plain Text
+
+Turn an unstructured prompt into a well-structured `.prompt` file.
+
+```bash
+promptdiff migrate my-messy-prompt.txt --output my-agent.prompt
+```
+
+Auto-classifies lines into PERSONA, CONSTRAINTS, EXAMPLES, OUTPUT FORMAT, GUARDRAILS, and CONTEXT sections using pattern matching.
+
+---
+
+## Prompt Composition
+
+Prompts can extend and include other prompts:
+
+```yaml
+---
+name: support-agent-v2
+extends: ./base-agent.prompt
+includes:
+  - ./shared/safety-rules.prompt
+  - ./shared/format.prompt
+---
+
+# CONSTRAINTS
+Additional constraints specific to this agent.
+```
+
+- **`extends`**: child sections override parent, unmatched parent sections are inherited
+- **`includes`**: sections are merged (included lines come first)
+
+```bash
+# See the fully resolved prompt
+promptdiff compose my-agent.prompt
+
+# Write it to a file
+promptdiff compose my-agent.prompt --output resolved.prompt
+```
+
+All commands (`lint`, `score`, `diff`, etc.) automatically resolve composition.
+
+---
+
+## Custom Lint Rules
+
+Create a `.promptdiffrc` in your project root:
+
+```json
+{
+  "rules": {
+    "disabled": ["injection-surface"],
+    "custom": [
+      {
+        "id": "required-guardrails",
+        "severity": "error",
+        "pattern": { "type": "require-section", "section": "guardrails" },
+        "message": "GUARDRAILS section is required by team policy."
+      },
+      {
+        "id": "no-todos",
+        "severity": "warn",
+        "pattern": { "type": "banned-words", "words": ["TODO", "FIXME", "hack"] },
+        "message": "Contains placeholder text."
+      },
+      {
+        "id": "max-prompt-size",
+        "severity": "warn",
+        "pattern": { "type": "max-word-count", "max": 500 },
+        "message": "Prompt exceeds 500 word limit."
+      }
+    ]
+  }
+}
+```
+
+Supported pattern types: `section-count`, `require-section`, `banned-words`, `min-examples`, `max-word-count`.
+
+---
+
+## MLflow Integration
+
+Log prompts, scores, and diffs to MLflow for experiment tracking.
+
+```bash
+# Log a prompt (params, metrics, quality score, artifact)
+promptdiff log-to-mlflow my-agent.prompt --experiment promptdiff
+
+# Log a diff between two versions
+promptdiff diff-to-mlflow v3.prompt v7.prompt --experiment promptdiff
+```
+
+Logs quality score dimensions as metrics, frontmatter as params, and the `.prompt` file as an artifact. Requires a running MLflow instance (`MLFLOW_TRACKING_URI` or `--tracking-uri`).
+
+---
+
 ## Version Tracking
 
 ```bash
@@ -423,14 +531,14 @@ Versions are tracked by content hash in `.promptdiff/history.json`. Same content
 ## Tests
 
 ```bash
-npm test                    # All 205 tests
+npm test                    # All 217 tests
 npm run test:unit           # Unit tests (parser, differ, linter, scorer, formatters)
 npm run test:integration    # Integration tests (full pipelines)
 npm run test:uat            # UAT tests (actual CLI invocations)
 npm run test:coverage       # Coverage report
 ```
 
-**205 tests** across 36 test suites. 94% line coverage. Every lint rule has tests for both firing and not firing. Every error path is tested.
+**217 tests** across 37 test suites. 94% line coverage. Every lint rule has tests for both firing and not firing. Every error path is tested.
 
 ---
 
@@ -459,11 +567,14 @@ No database. No server. No accounts. Everything local.
 
 ## Roadmap
 
-- [ ] `promptdiff compare` with live LLM A/B testing
-- [ ] Custom lint rules (`.promptdiffrc`)
-- [ ] Prompt composition (include/extend)
-- [ ] MLflow / LangSmith integration
-- [ ] `promptdiff migrate` — convert plain text → structured `.prompt`
+- [x] `promptdiff compare` — live LLM A/B testing (Claude, GPT-4o, Ollama)
+- [x] Custom lint rules via `.promptdiffrc`
+- [x] Prompt composition (`extends` + `includes`)
+- [x] MLflow integration (`log-to-mlflow`, `diff-to-mlflow`)
+- [x] `promptdiff migrate` — convert plain text → structured `.prompt`
+- [ ] `promptdiff compare` batch mode — test against multiple inputs
+- [ ] Prompt versioning with git-like `promptdiff commit` / `promptdiff checkout`
+- [ ] Team shared rule packs (npm-installable lint rule sets)
 
 ---
 

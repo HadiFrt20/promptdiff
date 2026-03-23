@@ -1,0 +1,8 @@
+---
+name: circular-b
+includes:
+  - ./circular-a.prompt
+---
+# Persona
+
+Agent B.

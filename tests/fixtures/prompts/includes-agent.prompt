@@ -1,0 +1,14 @@
+---
+name: includes-agent
+version: 1
+includes:
+  - ./shared/safety-rules.prompt
+  - ./shared/format.prompt
+---
+# Persona
+
+You are a coding assistant.
+
+# Format
+
+Always include code examples.

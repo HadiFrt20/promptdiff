@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { loadCustomRules } = require('./custom-rules');
 
 const RULES_DIR = path.join(__dirname, 'rules');
 
@@ -19,9 +20,21 @@ function loadRules(disabledRules = []) {
 
 function lint(parsedPrompt, options = {}) {
   const severityThreshold = options.severity || 'info';
-  const disabledRules = options.disabledRules || [];
+  const optDisabled = options.disabledRules || [];
 
-  const rules = loadRules(disabledRules);
+  const configDir = options.configDir || (parsedPrompt.filePath && parsedPrompt.filePath !== '<inline>'
+    ? path.dirname(path.resolve(parsedPrompt.filePath))
+    : process.cwd());
+
+  const { customRules, disabledRules: rcDisabled } = loadCustomRules(configDir);
+
+  const disabledRules = [...new Set([...optDisabled, ...rcDisabled])];
+
+  const builtinRules = loadRules(disabledRules);
+  const rules = [
+    ...builtinRules,
+    ...customRules.filter(r => !disabledRules.includes(r.id)),
+  ];
   const results = [];
   const fixable = [];
 

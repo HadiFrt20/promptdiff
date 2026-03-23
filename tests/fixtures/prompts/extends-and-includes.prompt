@@ -1,0 +1,10 @@
+---
+name: full-agent
+version: 3
+extends: ./base-agent.prompt
+includes:
+  - ./shared/safety-rules.prompt
+---
+# Constraints
+
+Follow company policy at all times.

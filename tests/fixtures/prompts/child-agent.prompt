@@ -1,0 +1,8 @@
+---
+name: child-agent
+version: 2
+extends: ./base-agent.prompt
+---
+# Constraints
+
+Be concise and direct.

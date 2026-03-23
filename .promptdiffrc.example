@@ -1,0 +1,37 @@
+{
+  "rules": {
+    "disabled": ["injection-surface"],
+    "custom": [
+      {
+        "id": "max-sections",
+        "severity": "warn",
+        "pattern": { "type": "section-count", "max": 6 },
+        "message": "Too many sections. Keep prompts focused."
+      },
+      {
+        "id": "required-section",
+        "severity": "error",
+        "pattern": { "type": "require-section", "section": "guardrails" },
+        "message": "GUARDRAILS section is required by team policy."
+      },
+      {
+        "id": "banned-word",
+        "severity": "warn",
+        "pattern": { "type": "banned-words", "words": ["hack", "workaround", "TODO"] },
+        "message": "Contains banned word."
+      },
+      {
+        "id": "min-examples",
+        "severity": "error",
+        "pattern": { "type": "min-examples", "min": 3 },
+        "message": "Team policy requires at least 3 examples."
+      },
+      {
+        "id": "max-words",
+        "severity": "warn",
+        "pattern": { "type": "max-word-count", "max": 500 },
+        "message": "Prompt exceeds 500 word limit."
+      }
+    ]
+  }
+}
