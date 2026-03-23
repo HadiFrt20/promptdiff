@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="./assets/logo.svg" width="140" alt="promptdiff logo" />
+
 # promptdiff
 
 **Git for prompts.** Semantic diff, lint, score, and auto-fix for LLM prompt files.
