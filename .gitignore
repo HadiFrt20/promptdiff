@@ -1,0 +1,8 @@
+node_modules/
+coverage/
+.promptdiff/
+*.prompt
+!tests/fixtures/prompts/*.prompt
+.claude/
+demo.gif
+demo-*.sh

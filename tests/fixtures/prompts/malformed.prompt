@@ -1,0 +1,10 @@
+---
+name: malformed
+version: not_a_number
+---
+
+# PERSONA
+# CONSTRAINTS
+This has a section header but also content.
+# NOT A REAL SECTION
+Random text here.

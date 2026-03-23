@@ -1,0 +1,13 @@
+---
+name: unicode-test
+version: 1
+tags: [日本語, émoji]
+---
+
+# PERSONA
+Tú eres un asistente útil. 你是一个有用的助手.
+
+# CONSTRAINTS
+Répondre en français si la question est en français.
+日本語の質問には日本語で答えてください。
+Keep emoji in responses: 👋🎉✅❌

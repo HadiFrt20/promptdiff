@@ -1,0 +1,36 @@
+{
+  "name": "promptdiff",
+  "version": "0.1.0",
+  "description": "Semantic diff, lint, and A/B compare for LLM prompts",
+  "bin": {
+    "promptdiff": "./bin/promptdiff.js"
+  },
+  "scripts": {
+    "test": "jest --verbose",
+    "test:unit": "jest --testPathPattern=unit --verbose",
+    "test:integration": "jest --testPathPattern=integration --verbose",
+    "test:uat": "jest --testPathPattern=uat --verbose",
+    "test:coverage": "jest --coverage --verbose"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 30000,
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 85,
+        "lines": 85,
+        "statements": 85
+      }
+    }
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "chalk": "^4.1.2",
+    "js-yaml": "^4.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "@jest/globals": "^29.0.0"
+  }
+}
