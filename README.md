@@ -377,6 +377,13 @@ Files without frontmatter work too — sections are auto-detected. Plain `.txt` 
 
 ## JSON Output
 
+<div align="center">
+
+<!-- GIF: JSON output for CI -->
+![json output](./assets/demo-json.gif)
+
+</div>
+
 Every command supports `--json` for CI/CD pipelines:
 
 ```bash
@@ -414,7 +421,14 @@ Run the same input through two prompt versions and compare the outputs. Requires
 promptdiff compare v3.prompt v7.prompt --input "I was charged twice" --model claude
 ```
 
-Supports `--model claude`, `--model gpt4o`, `--model ollama`. Auto-detects from API keys if no flag is given.
+Supports `--model claude`, `--model gpt4o`, `--model ollama`, or any Ollama model name (e.g., `--model qwen2.5-coder:1.5b`). Auto-detects from API keys if no flag is given.
+
+<div align="center">
+
+<!-- GIF: compare command with real Ollama output -->
+![compare](./assets/demo-compare.gif)
+
+</div>
 
 ---
 
@@ -427,6 +441,13 @@ promptdiff migrate my-messy-prompt.txt --output my-agent.prompt
 ```
 
 Auto-classifies lines into PERSONA, CONSTRAINTS, EXAMPLES, OUTPUT FORMAT, GUARDRAILS, and CONTEXT sections using pattern matching.
+
+<div align="center">
+
+<!-- GIF: migrate plain text to structured prompt -->
+![migrate](./assets/demo-migrate.gif)
+
+</div>
 
 ---
 
@@ -459,6 +480,13 @@ promptdiff compose my-agent.prompt --output resolved.prompt
 ```
 
 All commands (`lint`, `score`, `diff`, etc.) automatically resolve composition.
+
+<div align="center">
+
+<!-- GIF: compose resolving extends -->
+![compose](./assets/demo-compose.gif)
+
+</div>
 
 ---
 
@@ -495,6 +523,13 @@ Create a `.promptdiffrc` in your project root:
 ```
 
 Supported pattern types: `section-count`, `require-section`, `banned-words`, `min-examples`, `max-word-count`.
+
+<div align="center">
+
+<!-- GIF: custom lint rules in action -->
+![custom rules](./assets/demo-custom-rules.gif)
+
+</div>
 
 ---
 
