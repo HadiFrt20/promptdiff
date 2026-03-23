@@ -49,6 +49,8 @@ npm install -g promptdiff
 
 Requires Node.js >= 18. Three runtime dependencies: `commander`, `chalk`, `js-yaml`.
 
+**No LLM or API keys required.** Every command runs locally with zero configuration. The only exception is `promptdiff compare` (A/B testing via LLM), which optionally needs an API key for Anthropic, OpenAI, or a local Ollama instance.
+
 ## Quick Start
 
 ```bash
@@ -455,7 +457,6 @@ No database. No server. No accounts. Everything local.
 
 ## Roadmap
 
-- [ ] VS Code extension with inline diagnostics
 - [ ] `promptdiff compare` with live LLM A/B testing
 - [ ] Custom lint rules (`.promptdiffrc`)
 - [ ] Prompt composition (include/extend)
