@@ -1,23 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="600" height="200">
-  <defs>
-    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#8B5CF6" />
-      <stop offset="100%" style="stop-color:#A78BFA" />
-    </linearGradient>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 190" width="680" height="190">
 
-  <!-- Terminal prompt caret > -->
-  <text x="0" y="140" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="160" font-weight="800" fill="url(#accent)">
-    &gt;
-  </text>
-
-  <!-- "prompt" in bold -->
-  <text x="95" y="140" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="140" font-weight="800" fill="#E2E8F0" letter-spacing="-4">
+  <!-- "prompt" text -->
+  <text x="0" y="130" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="130" font-weight="800" fill="#E2E8F0" letter-spacing="-3">
     prompt
   </text>
 
-  <!-- "diff" in accent color -->
-  <text x="453" y="140" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="140" font-weight="800" fill="url(#accent)" letter-spacing="-4">
+  <!-- "diff" text -->
+  <text x="430" y="130" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="130" font-weight="800" fill="#A78BFA" letter-spacing="-3">
     diff
+  </text>
+
+  <!-- Accent bar underneath -->
+  <rect x="430" y="148" width="220" height="6" rx="3" fill="#A78BFA" />
+
+  <!-- Tagline -->
+  <text x="0" y="185" font-family="SF Mono, Menlo, Monaco, Consolas, monospace" font-size="22" font-weight="500" fill="#A78BFA" opacity="0.7">
+    semantic diff · lint · score for LLM prompts
   </text>
 </svg>
