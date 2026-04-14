@@ -49,9 +49,18 @@ program
   .description('Run static analysis on a prompt file')
   .option('--fix', 'Show auto-fix suggestions')
   .option('--severity <level>', 'Minimum severity to show (error, warn, info)', 'warn')
+  .option('--fail-on-score-below <threshold>', 'Also compute quality score and exit with code 1 if below threshold (0-100)', parseInt)
   .action(handle((file, options) => {
     const { lintCommand } = require('../src/commands/lint');
-    lintCommand(resolve(file), { ...options, json: program.opts().json });
+    const result = lintCommand(resolve(file), { ...options, json: program.opts().json });
+    if (options.failOnScoreBelow != null) {
+      const { scoreCommand } = require('../src/commands/score');
+      const scoreResult = scoreCommand(resolve(file), { json: program.opts().json });
+      if (scoreResult.total < options.failOnScoreBelow) {
+        console.error(chalk.red(`Quality score ${scoreResult.total}/100 is below threshold ${options.failOnScoreBelow}`));
+        process.exit(1);
+      }
+    }
   }));
 
 program
@@ -144,9 +153,14 @@ program
 program
   .command('score <file>')
   .description('Compute quality score for a prompt file')
-  .action(handle((file) => {
+  .option('--fail-on-score-below <threshold>', 'Exit with code 1 if score is below threshold (0-100)', parseInt)
+  .action(handle((file, options) => {
     const { scoreCommand } = require('../src/commands/score');
-    scoreCommand(resolve(file), { json: program.opts().json });
+    const result = scoreCommand(resolve(file), { json: program.opts().json });
+    if (options.failOnScoreBelow != null && result.total < options.failOnScoreBelow) {
+      console.error(chalk.red(`Quality score ${result.total}/100 is below threshold ${options.failOnScoreBelow}`));
+      process.exit(1);
+    }
   }));
 
 program
